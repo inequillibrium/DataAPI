@@ -67,12 +67,26 @@ app.get('/:node/cpu', function (req, res) {
         res.status(500).send(err.stack)
     })
 });
+
 app.get('/:node/ram', function (req, res) {
     influx.query(`
       select * from ram_load
       where host = ${Influx.escape.stringLit(req.params.node)}
       and time > now() - 1h
       order by time desc
+    `).then(result => {
+        res.json(result)
+    }).catch(err => {
+        res.status(500).send(err.stack)
+    })
+});
+
+app.get('/:node/bots', function(req, res) {
+    influx.query(`
+        select * from bots_running
+        where host = ${Influx.escape.stringLit(req.params.node)}
+        and time > now() - 1h
+        order by time desc
     `).then(result => {
         res.json(result)
     }).catch(err => {
