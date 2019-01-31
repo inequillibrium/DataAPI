@@ -93,3 +93,5 @@ app.get('/:node/bots', function(req, res) {
         res.status(500).send(err.stack)
     })
 });
+
+app.listen(3500, () => console.log(`DataAPI is listening on port 3500!`));
